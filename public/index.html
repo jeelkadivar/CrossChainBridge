@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETH-BSC Bridge Interface</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4; /* Light gray background */
+            padding-top: 50px;
+        }
+        .title-container {
+            text-align: center;
+            margin-top: 180px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #72bcd4; /* Light blue background */
+            border-radius: 20px;
+            animation: fadeIn 1s ease-out;
+            max-width: 300px; /* Adjusted width */
+            margin: 0 auto; /* Centered horizontally */
+        }
+        .title {
+            font-size: 36px;
+            color: #ffffff; /* White text */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: bounce 1s ease-out;
+        }
+        .card {
+            border: 1px solid #ccc; /* Add border */
+            border-radius: 20px;
+            padding: 20px; /* Add padding */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            margin-top: 80px; /* Separate from title */
+            background-color: #ffffff; /* White background */
+        }
+        .card-header {
+            background-color: #FF6B6B; /* Red header background */
+            border: none;
+            border-top-left-radius: 20px; /* Rounded corners */
+            border-top-right-radius: 20px;
+        }
+        .card-title {
+            color: #ffffff; /* White text */
+            font-size: 24px;
+            padding: 15px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .btn-primary {
+            background-color: #6CB2EB; /* Blue color */
+            border-color: #A5D8FF; /* Faded blue color for border */
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            background-color: #4E9ED4; /* Hover effect with slightly darker blue */
+            border-color: #A5D8FF; /* Border color remains faded on hover */
+        }
+        .btn-icon {
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 20px;
+            color: #ffffff;
+        }
+        .form-control {
+            border-radius: 10px;
+        }
+        label {
+            font-weight: bold;
+            color: #333333;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.3s ease-out;
+        }
+        .dropdown-item {
+            color: #333;
+            font-weight: bold;
+        }
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        .dropdown-toggle::after {
+            display: inline-block;
+            margin-left: 0.255em;
+            vertical-align: 0.255em;
+            content: "";
+            border-top: 0.3em solid;
+            border-right: 0.3em solid transparent;
+            border-bottom: 0;
+            border-left: 0.3em solid transparent;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes bounce {
+            0% {
+                transform: translateY(-20px);
+            }
+            50% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+        .connect-wallet {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            z-index: 999;
+        }
+        .connect-wallet button {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: none;
+            border-radius: 10px;
+            background-color: #0048ff;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            transition: all 0.3s ease-in-out;
+        }
+        .connect-wallet button:before {
+            content: "";
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.3);
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            transition: all 0.3s ease-in-out;
+        }
+        .connect-wallet button:hover:before {
+            width: 120%;
+            height: 120%;
+        }
+        .modal-content {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <!-- Wallet Button -->
+    <div class="connect-wallet">
+        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#walletModal">Connect Wallet</button>
+    </div>
+
+    <!-- Wallet Modal -->
+    <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="walletModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="walletModalLabel">Connect Wallet</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Choose your preferred wallet provider:</p>
+                    <button class="btn btn-primary" onclick="connectMetaMask()"><img src="C:\Users\91908\Downloads\metamask-icon.svg"> MetaMask</button>
+                    <!-- Add more wallet options here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rest of the page content -->
+    <div class="title-container">
+        <h1 class="title"><i class="fab fa-ethereum"></i> Bridge <i class="fab fa-binance"></i></h1>
+    </div> 
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <!-- <div class="card-header">
+                        <div class="card-title">ETH-BSC Bridge Interface</div>
+                    </div> -->
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="amount">Amount:</label>
+                            <input type="text" class="form-control" id="amount" placeholder="Enter amount">
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="recipient">Recipient Address:</label>
+                            <input type="text" class="form-control" id="recipient" placeholder="Enter recipient address">
+                        </div> -->
+                        <div class="button-container">
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownDeposit" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fab fa-ethereum"></i> Ethereum
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownDeposit">
+                                    <a class="dropdown-item" href="#" onclick="setAction('deposit', 'ETH')">Ethereum</a>
+                                    <a class="dropdown-item" href="#" onclick="setAction('deposit', 'BSC')">Binance</a>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-right mx-3"></i>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownWithdraw" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fab fa-binance"></i> Binance
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownWithdraw">
+                                    <a class="dropdown-item" href="#" onclick="setAction('withdraw', 'BSC')">Binance</a>
+                                    <a class="dropdown-item" href="#" onclick="setAction('withdraw', 'ETH')">Ethereum</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button class="btn btn-primary" onclick="submitForm()">Confirm</button>
+                        </div>
+                        <div class="mt-3" id="output"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery (optional for some Bootstrap features) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        var action;
+        var network;
+    
+        function setAction(act, net) {
+            action = act;
+            network = net;
+            var dropdownButton;
+            if (act === 'deposit') {
+                dropdownButton = document.getElementById('dropdownDeposit');
+            } else {
+                dropdownButton = document.getElementById('dropdownWithdraw');
+            }
+            dropdownButton.innerHTML = `<i class="fab fa-${network.toLowerCase()}"></i> ${network}`;
+        }
+
+        // Function to submit the form
+        function submitForm() {
+            // Get form data
+            var amount = document.getElementById("amount").value;
+
+            // Send data to server
+            fetch('/submit-form', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amount: amount,
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Handle response from server
+                console.log(data);
+                alert("Form submitted successfully!");
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while submitting the form.");
+            });
+        }
+
+        // Add event listener to the toggle button
+        document.getElementById("toggleButton").addEventListener("click", toggleNetwork);
+    
+        function confirmAction() {
+            var amount = document.getElementById('amount').value;
+            var recipient = document.getElementById('recipient').value;
+            var fromNetwork = action === 'deposit' ? 'Ethereum' : 'Binance';
+            var toNetwork = action === 'deposit' ? 'Binance' : 'Ethereum';
+            document.getElementById('output').innerHTML = `<div class="alert alert-info" role="alert">Sending ${amount} tokens from ${fromNetwork} to ${toNetwork} at address: ${recipient}</div>`;
+            // Add your logic to initiate the transfer here
+        }
+    
+        function connectMetaMask() {
+            // Add logic to connect to MetaMask
+        }
+    </script>
+    
+</body>
+</html>

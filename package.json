@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.8.1",
+    "@truffle/hdwallet-provider": "^2.1.15",
+    "artifacts": "^0.0.1",
+    "body-parser": "^1.20.2",
+    "child_process": "^1.0.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "shelljs": "^0.8.5"
+  }
+}
